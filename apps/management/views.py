@@ -12,12 +12,16 @@ bp = Blueprint('manage',__name__,url_prefix='/manage')
 def index():
     return render_template("management/index.html")
 
-@bp.route('/')
+@bp.route('/logout')
 @login_required
 def logout():
     session.pop(key=constants.MANAGER_ID)
     return redirect(url_for('manage.login'))
 
+@bp.route('/profile')
+@login_required
+def profile():
+    return render_template('management/profile.html')
 '''
 @bp.route('/login')
 def login():

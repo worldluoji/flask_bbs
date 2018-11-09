@@ -1,0 +1,37 @@
+{% extends 'management/base.html' %}
+
+{% block title %}
+    Personal Info
+{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block content %}
+    {% set adminer=g.administrator %}
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>username:</td>
+                </td>{{ adminer.username }}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                </td>{{ adminer.email }}</td>
+            </tr>
+            <tr>
+                <td>Role:</td>
+                </td>TODO</td>
+            </tr>
+            <tr>
+                <td>Rights:</td>
+                </td>TODO</td>
+            </tr>
+            <tr>
+                <td>Access-Time:</td>
+                </td>{{ adminer.reg_time }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
