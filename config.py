@@ -14,6 +14,6 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 #if you don't set this parameter, the default value is 31 days
-PERMANENT_SESSION_LIFETIME = 7
+#PERMANENT_SESSION_LIFETIME = 31
 
 SECRET_KEY = os.urandom(24)

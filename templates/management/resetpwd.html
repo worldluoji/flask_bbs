@@ -1,0 +1,54 @@
+{% extends 'management/base.html' %}
+{% from "common/_macros.html" import static %}
+
+{% block title %}
+    Reset Password
+{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block head %}
+    <style>
+        .form-container{
+            width:360px;
+        }
+    </style>
+    <script src="{{ url_for("static",filename="management/js/resetpwd.js") }}"></script>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        <div class="form-container">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Old Password</span>
+                    <input type="password" class="form-control" name="oldpwd" placeholder="input old password">
+                </div>
+            </div>
+
+             <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">New Password</span>
+                    <input type="password" class="form-control" name="newpwd" placeholder="input new password">
+                </div>
+            </div>
+
+             <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Confirm Password</span>
+                    <input type="password" class="form-control" name="newpwd2" placeholder="confirm password">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary" id="submit">Save</button>
+            </div>
+        </div>
+    </form>
+    {% for msg in get_flashed_messages(category_filter=["err"]) %}
+       <p>{{ msg }}</p>
+    {% endfor %}
+{% endblock %}

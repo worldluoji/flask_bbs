@@ -4,10 +4,8 @@ from flask_migrate import Migrate,MigrateCommand
 from app import get_app
 from externs import db
 from apps.management import models as admin_models
-from flask_wtf import CSRFProtect
 
 app = get_app()
-CSRFProtect(app)
 
 # link manager and app
 manager = Manager(app)
