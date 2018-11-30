@@ -5,6 +5,7 @@ from apps.management import bp as manage_bp
 import config
 from externs import db
 from flask_wtf import CSRFProtect
+from externs import mail
 
 app = None
 
@@ -18,7 +19,12 @@ def create_app():
 
     #read the config file
     app.config.from_object(config)
+
+    #init database
     db.init_app(app)
+
+    #init email
+    mail.init_app(app)
 
     CSRFProtect(app)
 

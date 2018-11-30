@@ -26,9 +26,8 @@ $(function () {
             },
 
             'success': function (data) {
-                console.log('success')
                 if(data['code'] == 200) {
-                    bbsalert.alertSuccessToast('You have succeed to modify the password')
+                    bbsalert.alertSuccessToast('You have succeed to modify the password');
                     oldpwdNode.val("");
                     newpwdNode.val("");
                     newpwd2Node.val("");
@@ -40,7 +39,6 @@ $(function () {
             },
 
             'fail': function (error) {
-                console.log('fail')
                 bbsalert.alertNetworkError();
             }
         });

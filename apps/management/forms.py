@@ -1,7 +1,9 @@
 
 from flask_wtf import FlaskForm
 from wtforms.validators import  Email,Length,InputRequired,EqualTo
-from wtforms import StringField,PasswordField,SubmitField,IntegerField,Form
+from wtforms import StringField,PasswordField,SubmitField,IntegerField,Form,ValidationError
+from utils import memcache_operate
+from flask import g
 
 class LoginForm(FlaskForm):
     email = StringField(validators=[InputRequired(message='Please input email'),Email(message='Please input right format of email')])
@@ -17,3 +19,30 @@ class Resetpwdform(Form):
     def get_error(self):
         msg = self.errors.popitem()[1][0]
         return msg
+
+
+class ResetEmailForm(Form):
+    email = StringField(validators=[Email(message="Please input Email with right format!!!")])
+    captcha = StringField(validators=[Length(6,6,message="Please input right CAPTCHA!!!")])
+
+    def validate_email(self, field):
+        email = field.data
+        #print(email)
+        adminer = g.administrator
+        if email == adminer.email:
+            raise ValidationError("New Email can not be the same with old!!!")
+        return True
+
+    def validate_captcha(self,field):
+        captcha = field.data
+        email = self.email.data
+        cached_captcha = memcache_operate.get(email)
+
+        if not (cached_captcha and cached_captcha.lower() == captcha.lower()):
+            raise ValidationError("Email Captcha Error!!!")
+        return True
+
+    def get_error(self):
+        msg = self.errors.popitem()[1][0]
+        return msg
+
