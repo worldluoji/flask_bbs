@@ -25,11 +25,25 @@
             </tr>
             <tr>
                 <td>Role:</td>
-                <td>TODO</td>
+                <td>
+                    {% for role in adminer.roles %}
+                        {{ role.name }}
+                        {% if not loop.last %}
+                            ,
+                        {% endif %}
+                    {% endfor %}
+                </td>
             </tr>
             <tr>
                 <td>Rights:</td>
-                <td>TODO</td>
+                <td>
+                    {% for role in adminer.roles %}
+                        {{ role.desc }}
+                        {% if not loop.last %}
+                            /
+                        {% endif %}
+                    {% endfor %}
+                </td>
             </tr>
             <tr>
                 <td>Access-Time:</td>

@@ -1,8 +1,8 @@
 
 from flask import Blueprint,render_template,views,request,redirect,url_for,session,flash,g,jsonify
 from .forms import LoginForm,Resetpwdform,ResetEmailForm
-from .models import Administrator
-from .decortors import login_required
+from .models import Administrator,UserRights
+from .decortors import login_required,rights_check
 from externs import db
 import constants
 from utils import restful
@@ -56,6 +56,46 @@ def email_captcha():
         return restful.success('send captcha to {} successfully'.format(email))
     else:
         return restful.param_error('please input email')
+
+
+
+
+@bp.route('/adminusers/')
+@login_required
+@rights_check(UserRights.ADMINER)
+def adminusers():
+    return render_template('management/adminusers.html')
+
+@bp.route('/boards/')
+@login_required
+@rights_check(UserRights.BOARDEF)
+def boards():
+    return render_template('management/boards.html')
+
+@bp.route('/comments/')
+@login_required
+@rights_check(UserRights.COMMENTER)
+def comments():
+    return render_template('management/comments.html')
+
+@bp.route('/frontusers/')
+@login_required
+@rights_check(UserRights.FRONTUSER)
+def frontusers():
+    return render_template('management/frontusers.html')
+
+@bp.route('/posts/')
+@login_required
+@rights_check(UserRights.POSTER)
+def posts():
+    return render_template('management/posts.html')
+
+@bp.route('/roles/')
+@login_required
+@rights_check(UserRights.ALLOWED_ALL)
+def roles():
+    return render_template('management/roles.html')
+
 
 class LoginView(views.MethodView):
 
@@ -138,3 +178,4 @@ class ResetEmailView(views.MethodView):
 bp.add_url_rule('/login/', view_func=LoginView.as_view('login'))
 bp.add_url_rule('/resetpwd/', view_func=ResetPwdView.as_view('resetpwd'))
 bp.add_url_rule('/resetemail/', view_func=ResetEmailView.as_view('resetemail'))
+

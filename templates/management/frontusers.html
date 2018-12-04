@@ -1,0 +1,38 @@
+{% extends 'management/base.html' %}
+
+{% block title %}
+    前台用户管理
+{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="top-box">
+        <label>排序：</label>
+        <select class="top-select">
+            <option value="1" {% if current_sort=='1' %}selected{% endif %}>按加入时间排序</option>
+            <option value="2" {% if current_sort=='2' %}selected{% endif %}>按帖子量排序</option>
+            <option value="3" {% if current_sort=='3' %}selected{% endif %}>按评论量排序</option>
+        </select>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>用户名</th>
+            <th>手机号码</th>
+            <th>加入时间</th>
+            <th>发表帖子数</th>
+            <th>评论数</th>
+            <th>状态</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+{% endblock %}

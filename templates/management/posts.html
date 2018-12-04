@@ -1,0 +1,42 @@
+{% extends 'management/base.html' %}
+
+{% block title %}
+    帖子管理
+{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="top-box">
+        <div class="sort-group">
+            <label>排序：</label>
+            <select class="top-select" id="sort-select">
+                <option value="1" {% if c_sort == 1 %}selected{% endif %}>按时间排序</option>
+                <option value="2" {% if c_sort == 2 %}selected{% endif %}>按加精排序</option>
+                <option value="3" {% if c_sort == 3 %}selected{% endif %}>按评论量排序</option>
+            </select>
+        </div>
+        <div class="board-filter-group">
+            <label>过滤板块：</label>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>标题</th>
+            <th>发布时间</th>
+            <th>作者</th>
+            <th>板块</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+{% endblock %}

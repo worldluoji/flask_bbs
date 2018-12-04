@@ -46,17 +46,14 @@ $(function () {
         var permissionManageLi = $('.permission-manage');
         permissionManageLi.addClass('unfold').siblings().removeClass('unfold');
     }else if(url.indexOf('roles') >= 0){
-        var roleManageLi = $('.role-manage');
+        var roleManageLi = $('.cmsrole-manage');
         roleManageLi.addClass('unfold').siblings().removeClass('unfold');
-    }else if(url.indexOf('users') >= 0){
+    }else if(url.indexOf('frontusers') >= 0){
         var userManageLi = $('.user-manage');
         userManageLi.addClass('unfold').siblings().removeClass('unfold');
-    }else if(url.indexOf('cmsuser_manage') >= 0){
+    }else if(url.indexOf('adminusers') >= 0){
         var cmsuserManageLi = $('.cmsuser-manage');
         cmsuserManageLi.addClass('unfold').siblings().removeClass('unfold');
-    }else if(url.indexOf('cmsrole_manage') >= 0){
-        var cmsroleManageLi = $('.cmsrole-manage');
-        cmsroleManageLi.addClass('unfold').siblings().removeClass('unfold');
     }else if(url.indexOf('comments') >= 0) {
         var commentsManageLi = $('.comments-manage');
         commentsManageLi.addClass('unfold').siblings().removeClass('unfold');

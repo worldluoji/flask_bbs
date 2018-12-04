@@ -48,5 +48,28 @@ def create_role():
     db.session.add_all([visitor,operator,adminer,developer])
     db.session.commit()
 
+@manager.option('-e','--email',dest='email')
+def show_rights(email):
+    adminer = Adminer.query.filter_by(email=email).first()
+    if adminer:
+        print('User rights is {}'.format(adminer.rights))
+    else:
+        print('The user {} is not exist'.format(email))
+
+@manager.option('-e','--email',dest='email')
+@manager.option('-r','--role',dest='role')
+def add_role(email,role):
+    adminer = Adminer.query.filter_by(email=email).first()
+    if adminer:
+        roles = Role.query.filter_by(name=role).first()
+        if roles:
+            roles.users.append(adminer)
+            db.session.commit()
+            print('Succeed to add role {} to user {}'.format(role,email))
+        else:
+            print('There is no this role {}'.format(role))
+    else:
+        print('The user {} is not exist'.format(email))
+
 if __name__ == '__main__':
     manager.run()

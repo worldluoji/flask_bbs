@@ -1,6 +1,6 @@
 
 import constants
-from .models import Administrator
+from .models import Administrator,UserRights
 from flask import session,g
 from .views import bp
 
@@ -11,3 +11,8 @@ def bef_request():
         administrator = Administrator.query.get(manager_id)
         if administrator:
             g.administrator = administrator
+
+
+@bp.context_processor
+def admin_context_processor():
+    return {"UserRights":UserRights}

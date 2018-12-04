@@ -1,0 +1,31 @@
+{% extends 'management/base.html' %}
+
+{% block title %}
+    Admin用户管理
+{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="top-box">
+        <a href="#" class="btn btn-warning">添加管理员</a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>用户名</th>
+            <th>加入时间</th>
+            <th>分组</th>
+            <th>状态</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+{% endblock %}

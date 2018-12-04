@@ -10,6 +10,27 @@ python manage.py db upgrade
 '''
 
 
+class UserRights(object):
+    #bitmap 11111111
+    ALLOWED_ALL = 0b11111111
+
+    VISITOR = 0b00000001
+
+    POSTER = 0b00000010
+
+    COMMENTER = 0b00000100
+
+    BOARDEF = 0b00001000
+
+    FRONTUSER = 0b00010000
+
+    ADMINER = 0b00100000
+
+    DEVELOPER = ALLOWED_ALL
+
+    NORIGHTS = 0b00000000
+
+
 class Administrator(db.Model):
     __tablename__ = 'administrator'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -38,24 +59,25 @@ class Administrator(db.Model):
         return check_password_hash(self.password,password)
 
 
-class UserRights(object):
-    #bitmap 11111111
-    ALLOWED_ALL = 0b11111111
+    @property
+    def rights(self):
+        if not self.roles:
+            return UserRights.NORIGHTS
 
-    VISITOR = 0b00000001
+        all_rights = 0
 
-    POSTER = 0b00000010
+        for role in self.roles:
+            all_rights |= role.rights
 
-    COMMENTER = 0b00000100
+        return all_rights
 
-    BOARDEF = 0b00001000
 
-    FRONTUSER = 0b00010000
+    def has_rights(self,rights):
+        return (self.rights & rights) == rights
 
-    ADMINER = 0b00100000
-
-    DEVELOPER = 0b01000000
-
+    @property
+    def is_developer(self):
+        return self.has_rights(UserRights.ALLOWED_ALL)
 
 adminer_role = db.Table(
     'adminer_role_table',

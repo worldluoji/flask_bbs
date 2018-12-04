@@ -1,0 +1,29 @@
+{% extends 'management/base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}CMS组管理{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block content %}
+    <div class="top-box">
+        <a class="btn btn-warning add-board-btn" id="add-board-btn" href="#">添加新组</a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>组名</th>
+            <th>描述</th>
+            <th>权限</th>
+            <th>用户数</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+{% endblock %}
