@@ -2,6 +2,7 @@
 from flask_script import Manager
 from flask_migrate import Migrate,MigrateCommand
 from app import get_app
+from apps.forum.models import FrontUser
 from externs import db
 from apps.management import models as admin_models
 
@@ -70,6 +71,17 @@ def add_role(email,role):
             print('There is no this role {}'.format(role))
     else:
         print('The user {} is not exist'.format(email))
+
+
+@manager.option('-t','--telephone',dest='telephone')
+@manager.option('-u','--username',dest='username')
+@manager.option('-p','--password',dest='password')
+def create_frontuser(telephone,username,password):
+    user = FrontUser(telephone=telephone,username=username,password=password)
+    db.session.add(user)
+    db.session.commit()
+    print('Create front user successfully!!!')
+
 
 if __name__ == '__main__':
     manager.run()
