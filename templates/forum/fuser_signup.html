@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <title>Sign Up BBS</title>
     <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="{{ static('common/param_opt.js') }}"></script>
+    <script src="{{ static('forum/js/front_sign_up.js') }}"></script>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ static('forum/css/front_sign_base.css') }}">
@@ -46,7 +48,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" name="graph_captcha" placeholder="图形验证码">
                     <span class="input-group-addon captcha-addon" id="graph-captcha-btn">
-                        Code
+                        <image class="captcha-img" src="{{ url_for('forum.image_captcha') }}" alt="" id="captha-image"/>
                     </span>
                 </div>
             </div>
