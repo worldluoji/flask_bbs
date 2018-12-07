@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-# @Author: xiaotuo
-# @Date:   2016-10-29 22:18:38
-# @Last Modified by:   Administrator
-# @Last Modified time: 2016-11-21 20:08:31
+
 import random
 import string
 # pip install Pillow

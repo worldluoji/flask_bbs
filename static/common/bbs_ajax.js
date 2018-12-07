@@ -20,7 +20,6 @@ var base_ajax = {
 			'beforeSend':function(xhr,settings) {
 				if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                     var csrftoken = $('meta[name=csrf-token]').attr('content');
-                    console.log(csrftoken);
                     xhr.setRequestHeader("X-CSRFToken", csrftoken)
                 }
 			}
