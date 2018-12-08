@@ -1,0 +1,48 @@
+
+{% extends 'forum/fuser_sign_base.html' %}
+{% from 'common/_macros.html' import static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+{% block title %}
+    Sign in to BBS
+{% endblock %}
+
+{% block head %}
+     <script src="{{ static('forum/js/front_sign_in.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block signbox %}
+    <form action="" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="手机号码" name="telephone" value="">
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="密码">
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="remember" value="1">记住我
+            </label>
+        </div>
+
+        <div class="form-group">
+            <span style="display:none;" id="return-to-span">{{ return_to }}</span>
+            <button class="btn btn-warning btn-block" id="signin-btn">立即登录</button>
+        </div>
+
+        <div class="form-group">
+            <a href="{{ url_for('forum.signup') }}" class="signup-link">New User?Click to sign up</a>
+            <a href="#" class="forget-passwd" style="float:right;">Retrieve password</a>
+        </div>
+
+    </form>
+{% endblock %}

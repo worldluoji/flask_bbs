@@ -1,43 +1,34 @@
-
 body{
     background: #f3f3f3;
 }
 .outer-box{
-    background: #fff;
     width: 854px;
+    background: #fff;
     margin: 0 auto;
     overflow: hidden;
-    margin-top: 150px;
-    padding-bottom: 20px;
+}
+.logo-box{
+    text-align: center;
+    padding-top: 40px;
 }
 .logo-box img{
     width: 60px;
     height:60px;
-    display: block;
-    margin: 0 auto;
 }
-.sign-group{
+.page-title{
+    text-align: center;
+}
+.sign-box{
     width: 300px;
     margin: 0 auto;
-    margin-top: 50px;
+    padding-top: 50px;
 }
-.remember-me{
-    float: left;
-    margin-top: 0;
-}
-.forgetpwd{
-    float: right;
-}
-
-#send-captcha-btn{
-    cursor: pointer;
-}
-
 .captcha-addon{
     padding: 0;
+    overflow: hidden;
 }
 .captcha-img{
-    width: 80px;
-    height: 30px;
+    width: 94px;
+    height: 32px;
     cursor: pointer;
 }
