@@ -29,3 +29,14 @@ class SignupForm(FlaskForm):
     def get_error(self):
         msg = self.errors.popitem()[1][0]
         return msg
+
+
+class SignInForm(FlaskForm):
+
+    telephone = StringField(validators=[Regexp(regex=r'^1[3-9]\d{9}',message="Please input right telephone number")])
+    password = StringField(validators=[Length(6, 20, message='Please input password with length 6-20')])
+    remember = StringField()
+
+    def get_error(self):
+        msg = self.errors.popitem()[1][0]
+        return msg
