@@ -5,6 +5,7 @@ from app import get_app
 from apps.forum.models import FrontUser
 from externs import db
 from apps.management import models as admin_models
+from apps.communal import models as communal_models
 
 app = get_app()
 

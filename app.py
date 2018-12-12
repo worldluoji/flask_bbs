@@ -6,6 +6,9 @@ import config
 from externs import db
 from flask_wtf import CSRFProtect
 from externs import mail
+from gevent import pywsgi
+from gevent import monkey
+monkey.patch_all()
 
 app = None
 
@@ -38,4 +41,6 @@ def get_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(port=8000)
+    server = pywsgi.WSGIServer(('127.0.0.1',5000),app)
+    server.serve_forever()
+    #app.run(port=8000)

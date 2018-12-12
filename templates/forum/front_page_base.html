@@ -5,6 +5,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{% block title %} {% endblock %}</title>
     {% include "common/_header.html" %}
+    <link rel="stylesheet" href="{{ static("forum/css/front_base.css") }}">
     {% block head %}{% endblock %}
 </head>
 <body>

@@ -46,3 +46,14 @@ class ResetEmailForm(Form):
         msg = self.errors.popitem()[1][0]
         return msg
 
+
+class AddBannerForm(Form):
+    name = StringField(validators=[InputRequired(message="Please Input banner image name")])
+    image_url = StringField(validators=[InputRequired(message='Please Input banner image url')])
+    link_url = StringField(validators=[InputRequired(message='Please Input link url')])
+    priority = IntegerField(validators=[InputRequired(message='Please Input the priority of the banner image')])
+
+    def get_error(self):
+        msg = self.errors.popitem()[1][0]
+        return msg
+

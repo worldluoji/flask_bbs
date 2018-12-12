@@ -1,6 +1,6 @@
 
 from flask import Blueprint,render_template,views,request,redirect,url_for,session,flash,g,jsonify
-from .forms import LoginForm,Resetpwdform,ResetEmailForm
+from .forms import LoginForm,Resetpwdform,ResetEmailForm,AddBannerForm
 from .models import Administrator,UserRights
 from .decortors import login_required,rights_check
 from externs import db
@@ -11,6 +11,7 @@ from externs import mail
 from constants import CAPTCHA_SOURCE
 import random
 from utils import memcache_operate
+from apps.communal.models import BannerModel
 
 bp = Blueprint('manage',__name__,url_prefix='/manage')
 
@@ -96,6 +97,27 @@ def posts():
 def roles():
     return render_template('management/roles.html')
 
+@bp.route('/banners/')
+@login_required
+def banners():
+    banners = BannerModel.query.all()
+    return render_template('management/banners.html', banners=banners)
+
+@bp.route('/add_banner/', methods=['POST'])
+@login_required
+def add_banner():
+    form = AddBannerForm(request.form)
+    if form.validate():
+        name = form.name.data
+        image_url = form.image_url.data
+        link_url = form.link_url.data
+        priority = form.priority.data
+        banner = BannerModel(name=name,image_url=image_url,link_url=link_url,priority=priority)
+        db.session.add(banner)
+        db.session.commit()
+        return restful.success()
+    else:
+        return restful.param_error(form.get_error())
 
 class LoginView(views.MethodView):
 
@@ -174,6 +196,8 @@ class ResetEmailView(views.MethodView):
 
     def get(self):
         return render_template("management/resetemail.html")
+
+
 
 bp.add_url_rule('/login/', view_func=LoginView.as_view('login'))
 bp.add_url_rule('/resetpwd/', view_func=ResetPwdView.as_view('resetpwd'))

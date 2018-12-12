@@ -55,7 +55,7 @@
                 </li>
 
                 {% set adminer=g.administrator %}
-
+                 <li class="nav-group banner-manage"><a href="{{ url_for('manage.banners') }}">轮播图管理</a></li>
                 {% if adminer.has_rights(UserRights.POSTER) %}
                     <li class="nav-group post-manage"><a href="{{ url_for('manage.posts') }}">帖子管理</a></li>
                 {% endif %}
