@@ -1,6 +1,6 @@
 
 from flask import Blueprint,render_template,views,request,redirect,url_for,session,flash,g,jsonify
-from .forms import LoginForm,Resetpwdform,ResetEmailForm,AddBannerForm
+from .forms import LoginForm,Resetpwdform,ResetEmailForm,AddBannerForm,EditBannerForm
 from .models import Administrator,UserRights
 from .decortors import login_required,rights_check
 from externs import db
@@ -118,6 +118,46 @@ def add_banner():
         return restful.success()
     else:
         return restful.param_error(form.get_error())
+
+@bp.route('/edit_banner/', methods=['POST'])
+@login_required
+def edit_banner():
+    form = EditBannerForm(request.form)
+    if form.validate():
+        id = form.banner_id.data
+        name = form.name.data
+        image_url = form.image_url.data
+        link_url = form.link_url.data
+        priority = form.priority.data
+        banner = BannerModel.query.get(id)
+        if banner:
+            banner.name = name
+            banner.image_url = image_url
+            banner.link_url = link_url
+            banner.priority = priority
+            db.session.add(banner)
+            db.session.commit()
+            return restful.success()
+        return restful.param_error(message='There is no this banner')
+    else:
+        return restful.param_error(form.get_error())
+
+@bp.route('/del_banner/',methods=['POST'])
+@login_required
+def del_banner():
+    banner_id = request.form.get('banner_id')
+    if not banner_id:
+        return restful.param_error(message='banner id missing')
+
+    banner = BannerModel.query.get(banner_id)
+
+    if banner:
+        db.session.delete(banner)
+        db.session.commit()
+        return restful.success()
+    else:
+        return restful.param_error(message='There is no this banner')
+
 
 class LoginView(views.MethodView):
 

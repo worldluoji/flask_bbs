@@ -57,3 +57,6 @@ class AddBannerForm(Form):
         msg = self.errors.popitem()[1][0]
         return msg
 
+class EditBannerForm(AddBannerForm):
+    banner_id = IntegerField(validators=[InputRequired(message="Please input banner id")])
+

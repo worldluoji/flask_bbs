@@ -6,12 +6,14 @@ from .models import FrontUser
 from externs import db
 from utils.safeutils import is_safe_url
 import constants
+from apps.communal.models import BannerModel
 
 bp = Blueprint('forum',__name__,url_prefix='/forum')
 
 @bp.route('/')
 def index():
-    return render_template('forum/index.html')
+    banners = BannerModel.query.all()
+    return render_template('forum/index.html',banners=banners)
 
 class SignUpView(views.MethodView):
     def get(self):
