@@ -12,7 +12,7 @@ bp = Blueprint('forum',__name__,url_prefix='/forum')
 
 @bp.route('/')
 def index():
-    banners = BannerModel.query.all()
+    banners = BannerModel.query.order_by(BannerModel.priority.desc()).limit(4)
     return render_template('forum/index.html',banners=banners)
 
 class SignUpView(views.MethodView):

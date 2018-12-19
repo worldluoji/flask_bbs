@@ -131,3 +131,18 @@ $(function() {
 
     });
 });
+
+
+$(function() {
+
+    qiniu.setUp({
+        'domain' : 'http://pjzlzc41u.bkt.clouddn.com/',
+        'browse_btn' : 'upload-btn',
+        'uptoken_url' : '/communal/uptoken/',
+        'success': function(up,file,info) {
+            var image_input = $("input[name=image_url]");
+            image_input.val(file.name);
+        }
+    });
+
+})

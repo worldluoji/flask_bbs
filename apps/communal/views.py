@@ -1,8 +1,10 @@
 
-from flask import Blueprint,make_response
+from flask import Blueprint,make_response,jsonify
 from utils.captcha import xtcaptcha
 from io import BytesIO
 from utils import memcache_operate
+import qiniu
+import config
 
 bp = Blueprint('communal',__name__,url_prefix='/communal')
 
@@ -28,3 +30,13 @@ def image_captcha():
     memcache_operate.set(text.lower(),text.lower(),timeout=2*68)
 
     return resp
+
+
+@bp.route('/uptoken/')
+def uptoken():
+    access_key = config.QINIU_ACCESS_KEY
+    secret_key = config.QINIU_SECRET_KEY
+    auth = qiniu.Auth(access_key,secret_key)
+    storage_space_name = config.QINIU_STORAGE_SPACE
+    token = auth.upload_token(storage_space_name)
+    return jsonify({"uptoken":token})
