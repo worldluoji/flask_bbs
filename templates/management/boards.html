@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block head %}
-
+    <script src="{{ static('management/js/board.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -19,13 +19,22 @@
     <table class="table table-bordered">
         <thead>
             <th>板块名称</th>
-            <th>创建者</th>
             <th>创建时间</th>
             <th>帖子数量</th>
             <th>操作</th>
         </thead>
-        <tbody>
-
-        </tbody>
+        {% for board in boards %}
+            <tbody>
+                <tr board-name="{{ board.board_name }}" board-id="{{ board.id }}" >
+                    <td>{{ board.board_name }}</td>
+                    <td>{{ board.create_time }}</td>
+                    <td>0</td>
+                    <td>
+                        <button class="btn btn-default btn-xs edit-board-btn">编辑</button>
+                        <button class="btn btn-danger btn-xs delete-board-btn">删除</button>
+                    </td>
+                </tr>
+            </tbody>
+        {% endfor %}
     </table>
 {% endblock %}

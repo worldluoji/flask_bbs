@@ -13,8 +13,9 @@ a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, bo
 }
 
 .lg-container{
-    width: 730px;
+    width: 900px;
     float: left;
+    padding-left: 120px;
 }
 
 .sm-container{

@@ -7,13 +7,19 @@ from externs import db
 from utils.safeutils import is_safe_url
 import constants
 from apps.communal.models import BannerModel
+from apps.management.models import Board
 
 bp = Blueprint('forum',__name__,url_prefix='/forum')
 
 @bp.route('/')
 def index():
     banners = BannerModel.query.order_by(BannerModel.priority.desc()).limit(4)
-    return render_template('forum/index.html',banners=banners)
+    boards = Board.query.all()
+    context = {
+        'banners': banners,
+        'boards': boards
+    }
+    return render_template('forum/index.html', **context)
 
 class SignUpView(views.MethodView):
     def get(self):

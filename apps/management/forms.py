@@ -60,3 +60,13 @@ class AddBannerForm(Form):
 class EditBannerForm(AddBannerForm):
     banner_id = IntegerField(validators=[InputRequired(message="Please input banner id")])
 
+
+class AddBoardForm(Form):
+    board_name = StringField(validators=[InputRequired(message="Please Input board name")])
+
+    def get_error(self):
+        msg = self.errors.popitem()[1][0]
+        return msg
+
+class EditBoardForm(AddBoardForm):
+    board_id = IntegerField(validators=[InputRequired(message="Please Input board id")])

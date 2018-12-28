@@ -1,7 +1,7 @@
 
 from flask import Blueprint,render_template,views,request,redirect,url_for,session,flash,g,jsonify
-from .forms import LoginForm,Resetpwdform,ResetEmailForm,AddBannerForm,EditBannerForm
-from .models import Administrator,UserRights
+from .forms import LoginForm,Resetpwdform,ResetEmailForm,AddBannerForm,EditBannerForm,AddBoardForm,EditBoardForm
+from .models import Administrator,UserRights,Board
 from .decortors import login_required,rights_check
 from externs import db
 import constants
@@ -67,11 +67,6 @@ def email_captcha():
 def adminusers():
     return render_template('management/adminusers.html')
 
-@bp.route('/boards/')
-@login_required
-@rights_check(UserRights.BOARDEF)
-def boards():
-    return render_template('management/boards.html')
 
 @bp.route('/comments/')
 @login_required
@@ -158,6 +153,59 @@ def del_banner():
     else:
         return restful.param_error(message='There is no this banner')
 
+@bp.route('/add_board/', methods=['POST'])
+@login_required
+@rights_check(UserRights.BOARDEF)
+def add_board():
+    form = AddBoardForm(request.form)
+    if form.validate():
+        board_name = form.board_name.data
+        board = Board(board_name=board_name)
+        db.session.add(board)
+        db.session.commit()
+        return restful.success()
+    else:
+        return restful.param_error(form.get_error())
+
+@bp.route('/edit_board/', methods=['POST'])
+@login_required
+@rights_check(UserRights.BOARDEF)
+def edit_board():
+    form = EditBoardForm(request.form)
+    if form.validate():
+        board_id = form.board_id.data
+        board = Board.query.get(board_id)
+        if board:
+            board.board_name = form.board_name.data
+            db.session.commit()
+            return restful.success()
+        else:
+            return restful.param_error(form.get_error(message='There is no this board'))
+    else:
+        return restful.param_error(form.get_error())
+
+@bp.route('/del_board/', methods=['POST'])
+@login_required
+@rights_check(UserRights.BOARDEF)
+def del_board():
+    board_id = request.form.get('board_id')
+    if not board_id:
+        return restful.param_error(message='Please input board id')
+
+    board = Board.query.get(board_id)
+    if board:
+        db.session.delete(board)
+        db.session.commit()
+        return restful.success()
+    else:
+        return restful.param_error(message='There is no this board')
+
+@bp.route('/boards/')
+@login_required
+@rights_check(UserRights.BOARDEF)
+def boards():
+    total_boards = Board.query.all()
+    return render_template('management/boards.html',boards=total_boards)
 
 class LoginView(views.MethodView):
 

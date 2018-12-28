@@ -7,8 +7,8 @@ from externs import db
 from flask_wtf import CSRFProtect
 from externs import mail
 from gevent import pywsgi
-from gevent import monkey
-monkey.patch_all()
+#from gevent import monkey
+
 
 app = None
 
