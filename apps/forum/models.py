@@ -39,3 +39,22 @@ class FrontUser(db.Model):
 
     def check_password(self,passwd):
         return check_password_hash(self._password,passwd)
+
+
+class Board(db.Model):
+    __tablename__ = 'board'
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    board_name = db.Column(db.String(20),nullable=False)
+    #create_user = db.Column(db.String(50),nullable=False)
+    create_time = db.Column(db.DATETIME,default=datetime.now)
+
+class Post(db.Model):
+    __tablename__ = 'post'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    create_time = db.Column(db.DATETIME, default=datetime.now)
+    board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
+    board = db.relationship("Board",backref="posts")
+
+

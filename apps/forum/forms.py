@@ -1,8 +1,9 @@
 
 from wtforms.validators import Length,EqualTo,Regexp
-from wtforms import StringField,ValidationError
+from wtforms import StringField, ValidationError, IntegerField
 from flask_wtf import FlaskForm
 from utils import memcache_operate
+from wtforms.validators import InputRequired
 
 
 class SignupForm(FlaskForm):
@@ -36,6 +37,15 @@ class SignInForm(FlaskForm):
     telephone = StringField(validators=[Regexp(regex=r'^1[3-9]\d{9}',message="Please input right telephone number")])
     password = StringField(validators=[Length(6, 20, message='Please input password with length 6-20')])
     remember = StringField()
+
+    def get_error(self):
+        msg = self.errors.popitem()[1][0]
+        return msg
+
+class PubPostForm(FlaskForm):
+    title = StringField(validators=[InputRequired(message='Please input title')])
+    content = StringField(validators=[InputRequired(message='Please input content')])
+    board_id = IntegerField(validators=[InputRequired(message='Please input board_id')])
 
     def get_error(self):
         msg = self.errors.popitem()[1][0]

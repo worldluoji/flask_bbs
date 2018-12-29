@@ -39,3 +39,11 @@ QINIU_ACCESS_KEY = 'sT9h81_RCdaeVesZ2xhN0OYjxfzmRssQ13crpnZO'
 QINIU_SECRET_KEY = '0dKrQne19F2ZK1DnLy8kBDILvc1p5qV9oIUo5tni'
 QINIU_STORAGE_SPACE = 'luojivideo'
 
+
+#UEditor
+UEDITOR_UPLOAD_PATH = os.path.join(os.path.dirname(__file__),'images')
+UEDITOR_UPLOAD_TO_QINIU = True
+UEDITOR_QINIU_ACCESS_KEY = "sT9h81_RCdaeVesZ2xhN0OYjxfzmRssQ13crpnZO"
+UEDITOR_QINIU_SECRET_KEY = "0dKrQne19F2ZK1DnLy8kBDILvc1p5qV9oIUo5tni"
+UEDITOR_QINIU_BUCKET_NAME = "luojivideo"
+UEDITOR_QINIU_DOMAIN = "http://pjzlzc41u.bkt.clouddn.com/"

@@ -99,10 +99,3 @@ class Role(db.Model):
         return self.name
 
 
-class Board(db.Model):
-    __tablename__ = 'board'
-    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
-    board_name = db.Column(db.String(20),nullable=False)
-    #create_user = db.Column(db.String(50),nullable=False)
-    create_time = db.Column(db.DATETIME,default=datetime.now)
-

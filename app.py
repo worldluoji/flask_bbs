@@ -7,6 +7,7 @@ from externs import db
 from flask_wtf import CSRFProtect
 from externs import mail
 from gevent import pywsgi
+from apps.ueditor import bp as ueditor_bp
 #from gevent import monkey
 
 
@@ -19,6 +20,7 @@ def create_app():
     app.register_blueprint(comm_bp)
     app.register_blueprint(forum_bp)
     app.register_blueprint(manage_bp)
+    app.register_blueprint(ueditor_bp)
 
     #read the config file
     app.config.from_object(config)

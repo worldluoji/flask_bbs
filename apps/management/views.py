@@ -1,7 +1,7 @@
 
 from flask import Blueprint,render_template,views,request,redirect,url_for,session,flash,g,jsonify
 from .forms import LoginForm,Resetpwdform,ResetEmailForm,AddBannerForm,EditBannerForm,AddBoardForm,EditBoardForm
-from .models import Administrator,UserRights,Board
+from .models import Administrator,UserRights
 from .decortors import login_required,rights_check
 from externs import db
 import constants
@@ -12,6 +12,7 @@ from constants import CAPTCHA_SOURCE
 import random
 from utils import memcache_operate
 from apps.communal.models import BannerModel
+from apps.forum.models import Board
 
 bp = Blueprint('manage',__name__,url_prefix='/manage')
 
