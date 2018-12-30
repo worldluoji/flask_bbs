@@ -54,7 +54,11 @@ class Post(db.Model):
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
     create_time = db.Column(db.DATETIME, default=datetime.now)
+
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
     board = db.relationship("Board",backref="posts")
+
+    author_id = db.Column(db.String(100), db.ForeignKey('front_user.id'))
+    author = db.relationship('FrontUser', backref='posts')
 
 

@@ -12,7 +12,7 @@ from constants import CAPTCHA_SOURCE
 import random
 from utils import memcache_operate
 from apps.communal.models import BannerModel
-from apps.forum.models import Board
+from apps.forum.models import Board,Post
 
 bp = Blueprint('manage',__name__,url_prefix='/manage')
 
@@ -85,7 +85,24 @@ def frontusers():
 @login_required
 @rights_check(UserRights.POSTER)
 def posts():
-    return render_template('management/posts.html')
+    posts = Post.query.all()
+    return render_template('management/posts.html',posts=posts)
+
+@bp.route('/del_post/',methods=['POST'])
+@login_required
+@rights_check(UserRights.POSTER)
+def del_post():
+    post_id = request.form.get('post_id')
+    if not post_id:
+        return restful.param_error(message='Please input post id')
+
+    post = Post.query.get(post_id)
+    if not post:
+        return restful.param_error(message='This post is not exist')
+
+    db.session.delete(post)
+    db.session.commit()
+    return restful.success()
 
 @bp.route('/roles/')
 @login_required

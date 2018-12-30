@@ -1,5 +1,5 @@
 
-from flask import Blueprint, views, render_template, request, url_for, session
+from flask import Blueprint, views, render_template, request, url_for, session,g
 from .forms import SignupForm, SignInForm, PubPostForm
 from utils import restful
 from .models import FrontUser, Board, Post
@@ -8,16 +8,28 @@ from utils.safeutils import is_safe_url
 import constants
 from apps.communal.models import BannerModel
 from .decortors import login_required
+from flask_paginate import Pagination, get_page_parameter
+import config
 
-bp = Blueprint('forum',__name__,url_prefix='/forum')
+bp = Blueprint('forum', __name__, url_prefix='/forum')
 
 @bp.route('/')
 def index():
     banners = BannerModel.query.order_by(BannerModel.priority.desc()).limit(4)
     boards = Board.query.all()
+
+    #/?page=xxx
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    pagination = Pagination(page=page, total=Post.query.count(), bs_version=3)
+    start = (page-1) * config.POSTS_PER_PAGE
+    end = start + config.POSTS_PER_PAGE
+    posts = Post.query.slice(start, end)
+
     context = {
         'banners': banners,
-        'boards': boards
+        'boards': boards,
+        'posts': posts,
+        'pagination': pagination
     }
     return render_template('forum/index.html', **context)
 
@@ -38,6 +50,7 @@ def publish_post():
                 return restful.param_error(message='There is no this board')
 
             post = Post(title=title,content=content,board_id=board_id)
+            post.author_id = g.user.id
             db.session.add(post)
             db.session.commit()
             return restful.success()

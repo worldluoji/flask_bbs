@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block head %}
-
+    <script src="{{ static('management/js/post.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -35,7 +35,18 @@
             <th>操作</th>
         </thead>
         <tbody>
-
+             {% for post in posts %}
+                <tr post-id="{{ post.id }}">
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.create_time }}</td>
+                    <td>{{ post.author.username }}</td>
+                    <td>{{ post.board.board_name }}</td>
+                    <td>
+                        <button class="btn btn-default btn-xs edit-post-btn">编辑</button>
+                        <button class="btn btn-danger btn-xs delete-post-btn">删除</button>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 

@@ -2,7 +2,7 @@
 from flask_script import Manager
 from flask_migrate import Migrate,MigrateCommand
 from app import get_app
-from apps.forum.models import FrontUser
+from apps.forum.models import FrontUser,Post,Board
 from externs import db
 from apps.management import models as admin_models
 from apps.communal import models as communal_models
@@ -82,6 +82,18 @@ def create_frontuser(telephone,username,password):
     db.session.add(user)
     db.session.commit()
     print('Create front user successfully!!!')
+
+@manager.command
+def create_test_posts():
+    for x in range(33):
+        title = 'Title%s' %x
+        content = 'Hello %s' %x
+        author = FrontUser.query.first()
+        board = Board.query.first()
+        post = Post(title=title, content=content, board=board, author=author)
+        db.session.add(post)
+        db.session.commit()
+    print('Add test posts successfully!!!')
 
 
 if __name__ == '__main__':

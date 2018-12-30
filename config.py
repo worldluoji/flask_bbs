@@ -6,7 +6,7 @@ DB_USER = 'luoji'
 DB_PASS = 'Password@199114'
 DB_HOST = '127.0.0.1'
 DB_PORT = '3306'
-DB_NAME = 'bbs'
+DB_NAME = 'flask_bbs'
 
 DB_URI = 'mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8'.format(DB_USER,DB_PASS,DB_HOST,DB_PORT,DB_NAME)
 SQLALCHEMY_DATABASE_URI = DB_URI
@@ -47,3 +47,6 @@ UEDITOR_QINIU_ACCESS_KEY = "sT9h81_RCdaeVesZ2xhN0OYjxfzmRssQ13crpnZO"
 UEDITOR_QINIU_SECRET_KEY = "0dKrQne19F2ZK1DnLy8kBDILvc1p5qV9oIUo5tni"
 UEDITOR_QINIU_BUCKET_NAME = "luojivideo"
 UEDITOR_QINIU_DOMAIN = "http://pjzlzc41u.bkt.clouddn.com/"
+
+#flask-paginate
+POSTS_PER_PAGE = 9

@@ -21,4 +21,5 @@ a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, bo
 .sm-container{
     width: 250px;
     float: right;
+    padding-right: 30px;
 }
