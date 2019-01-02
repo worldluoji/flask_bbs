@@ -50,3 +50,12 @@ class PubPostForm(FlaskForm):
     def get_error(self):
         msg = self.errors.popitem()[1][0]
         return msg
+
+
+class AddCommentForm(FlaskForm):
+    content = StringField(validators=[InputRequired(message='Please input content')])
+    post_id = IntegerField(validators=[InputRequired(message='Please input post_id')])
+
+    def get_error(self):
+        msg = self.errors.popitem()[1][0]
+        return msg

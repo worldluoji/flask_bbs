@@ -2,7 +2,7 @@
 import constants
 from .models import FrontUser
 from .views import bp
-from flask import session,g
+from flask import session, g, render_template
 
 @bp.before_request
 def before_user_req():
@@ -12,3 +12,6 @@ def before_user_req():
         if user:
             g.user = user
 
+@bp.errorhandler
+def page_not_found():
+    return 'Page not found', 404

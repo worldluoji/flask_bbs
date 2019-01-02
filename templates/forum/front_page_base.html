@@ -19,7 +19,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">FLASK 论坛</a>
+          <a class="navbar-brand" href="/forum/">FLASK 论坛</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -35,6 +35,7 @@
           </form>
           <ul class="nav navbar-nav navbar-right">
             {% if g.user %}
+                <span id="isLogin" style="display: none;">check if login</span>
                 <li id="user-btn"><a href="#">{{ g.user.username }}</a></li>
             {% else %}
                 <li><a href="{{ url_for('forum.signin') }}">登录</a></li>

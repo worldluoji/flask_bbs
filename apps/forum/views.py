@@ -1,8 +1,8 @@
 
-from flask import Blueprint, views, render_template, request, url_for, session,g
-from .forms import SignupForm, SignInForm, PubPostForm
+from flask import Blueprint, views, render_template, request, url_for, session, g, abort
+from .forms import SignupForm, SignInForm, PubPostForm, AddCommentForm
 from utils import restful
-from .models import FrontUser, Board, Post
+from .models import FrontUser, Board, Post, Comment
 from externs import db
 from utils.safeutils import is_safe_url
 import constants
@@ -20,20 +20,39 @@ def index():
 
     #/?page=xxx
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    pagination = Pagination(page=page, total=Post.query.count(), bs_version=3)
-    start = (page-1) * config.POSTS_PER_PAGE
+    start = (page - 1) * config.POSTS_PER_PAGE
     end = start + config.POSTS_PER_PAGE
-    posts = Post.query.slice(start, end)
+
+    board_id = request.args.get("board_id", type=int, default=None)
+    if board_id:
+        query_base = Post.query.filter_by(board_id=board_id)
+        pagination = Pagination(page=page, total=query_base.count(), bs_version=3)
+        posts = query_base.slice(start, end)
+    else:
+        pagination = Pagination(page=page, total=Post.query.count(), bs_version=3)
+        posts = Post.query.slice(start, end)
 
     context = {
         'banners': banners,
         'boards': boards,
         'posts': posts,
-        'pagination': pagination
+        'pagination': pagination,
+        'current_board': board_id
+
     }
     return render_template('forum/index.html', **context)
 
-@bp.route('/ppost/',methods=['GET','POST'])
+@bp.route('/post_detail/<int:post_id>')
+def post_detail(post_id):
+    post = Post.query.get(post_id)
+
+    if not post:
+        abort(404)
+
+    return render_template('forum/post_detail.html', post=post)
+
+
+@bp.route('/ppost/', methods=['GET', 'POST'])
 @login_required
 def publish_post():
     if request.method == 'GET':
@@ -56,6 +75,25 @@ def publish_post():
             return restful.success()
         else:
             return restful.param_error(message=form.get_error())
+
+
+@bp.route('/add_comment/', methods=['POST'])
+@login_required
+def add_comment():
+    form = AddCommentForm(request.form)
+    if form.validate():
+        content = form.content.data
+        post_id = form.post_id.data
+        post = Post.query.get(post_id)
+        if not post:
+            return restful.param_error(message='This post is not exist')
+        author = g.user
+        comment = Comment(content=content, post=post, author=author)
+        db.session.add(comment)
+        db.session.commit()
+        return restful.success()
+    else:
+        return restful.param_error(form.get_error())
 
 class SignUpView(views.MethodView):
     def get(self):

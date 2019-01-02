@@ -61,4 +61,15 @@ class Post(db.Model):
     author_id = db.Column(db.String(100), db.ForeignKey('front_user.id'))
     author = db.relationship('FrontUser', backref='posts')
 
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.Text, nullable=False)
+    create_time = db.Column(db.DATETIME, default=datetime.now)
+
+    author_id = db.Column(db.String(100), db.ForeignKey('front_user.id'))
+    author = db.relationship('FrontUser', backref='comments')
+
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    post = db.relationship('Post', backref='comments')
 
