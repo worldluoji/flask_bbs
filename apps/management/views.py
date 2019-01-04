@@ -1,8 +1,8 @@
 
-from flask import Blueprint,render_template,views,request,redirect,url_for,session,flash,g,jsonify
-from .forms import LoginForm,Resetpwdform,ResetEmailForm,AddBannerForm,EditBannerForm,AddBoardForm,EditBoardForm
-from .models import Administrator,UserRights
-from .decortors import login_required,rights_check
+from flask import Blueprint, render_template, views,request, redirect, url_for,session, flash, g, jsonify
+from .forms import LoginForm, Resetpwdform, ResetEmailForm, AddBannerForm, EditBannerForm, AddBoardForm, EditBoardForm
+from .models import Administrator, UserRights
+from .decortors import login_required, rights_check
 from externs import db
 import constants
 from utils import restful
@@ -12,7 +12,9 @@ from constants import CAPTCHA_SOURCE
 import random
 from utils import memcache_operate
 from apps.communal.models import BannerModel
-from apps.forum.models import Board,Post
+from apps.forum.models import Board, Post, HighLightPost
+from flask_paginate import Pagination, get_page_parameter
+import config
 
 bp = Blueprint('manage',__name__,url_prefix='/manage')
 
@@ -81,12 +83,61 @@ def comments():
 def frontusers():
     return render_template('management/frontusers.html')
 
+
+@bp.route('/light_post/', methods=['POST'])
+@login_required
+@rights_check(UserRights.POSTER)
+def highlight_post():
+    post_id = request.form.get("post_id")
+    if not post_id:
+        return restful.param_error(message='Please input post id')
+
+    post = Post.query.get(post_id)
+    if not post:
+        return restful.param_error(message='This post i not exist')
+
+    highlight = HighLightPost()
+    highlight.post = post
+    db.session.add(highlight)
+    db.session.commit()
+    return restful.success()
+
+@bp.route('/unlight_post/', methods=['POST'])
+@login_required
+@rights_check(UserRights.POSTER)
+def del_highlight_post():
+    post_id = request.form.get("post_id")
+    if not post_id:
+        return restful.param_error(message='Please input post id')
+
+    post = Post.query.get(post_id)
+    if not post:
+        return restful.param_error(message='This post i not exist')
+
+    #highlight = post.highlight   <class 'sqlalchemy.orm.collections.InstrumentedList'>
+    highlight = post.highlight[0]
+    print(highlight)
+    db.session.delete(highlight)
+    db.session.commit()
+    return restful.success()
+
 @bp.route('/posts/')
 @login_required
 @rights_check(UserRights.POSTER)
 def posts():
-    posts = Post.query.all()
-    return render_template('management/posts.html',posts=posts)
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    start = (page - 1) * config.POSTS_PER_PAGE
+    end = start + config.POSTS_PER_PAGE
+    pagination = Pagination(page=page, total=Post.query.count(), bs_version=3)
+    post_list = Post.query.slice(start, end)
+
+    context = {
+        'posts': post_list,
+        'pagination': pagination,
+
+    }
+    return render_template('management/posts.html', **context)
 
 @bp.route('/del_post/',methods=['POST'])
 @login_required
