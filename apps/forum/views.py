@@ -2,7 +2,7 @@
 from flask import Blueprint, views, render_template, request, url_for, session, g, abort
 from .forms import SignupForm, SignInForm, PubPostForm, AddCommentForm
 from utils import restful
-from .models import FrontUser, Board, Post, Comment
+from .models import FrontUser, Board, Post, Comment, HighLightPost
 from externs import db
 from utils.safeutils import is_safe_url
 import constants
@@ -10,6 +10,7 @@ from apps.communal.models import BannerModel
 from .decortors import login_required
 from flask_paginate import Pagination, get_page_parameter
 import config
+from sqlalchemy.sql import func
 
 bp = Blueprint('forum', __name__, url_prefix='/forum')
 
@@ -23,22 +24,39 @@ def index():
     start = (page - 1) * config.POSTS_PER_PAGE
     end = start + config.POSTS_PER_PAGE
 
+    query = None
+    classification = request.args.get("classification", type=int, default=0)
+    if classification == 0:
+        #按照创建时间新的帖子在前面
+        query = Post.query.order_by(Post.create_time.desc())
+    elif classification == 1:
+        #按照精华帖子创建时间排序，如果不是精华帖子，则按照帖子创建时间排序, outerjoin默认是left join
+        query = db.session.query(Post).outerjoin(HighLightPost).order_by(HighLightPost.create_time.desc(),
+                                                                         Post.create_time.desc())
+    elif classification == 2:
+        #TODO 按照点赞数
+        query = Post.query.order_by(Post.create_time.desc())
+    else:
+        #按照评论数排序
+        query = db.session.query(Post).outerjoin(Comment).group_by(Post.id).order_by(func.count(Comment.id).desc(),
+                                                                                     Post.create_time.desc())
+
     board_id = request.args.get("board_id", type=int, default=None)
     if board_id:
-        query_base = Post.query.filter_by(board_id=board_id)
+        query_base = query.filter(Post.board_id == board_id)
         pagination = Pagination(page=page, total=query_base.count(), bs_version=3)
         posts = query_base.slice(start, end)
     else:
-        pagination = Pagination(page=page, total=Post.query.count(), bs_version=3)
-        posts = Post.query.slice(start, end)
+        pagination = Pagination(page=page, total=query.count(), bs_version=3)
+        posts = query.slice(start, end)
 
     context = {
         'banners': banners,
         'boards': boards,
         'posts': posts,
         'pagination': pagination,
-        'current_board': board_id
-
+        'current_board': board_id,
+        'current_classification': classification
     }
     return render_template('forum/index.html', **context)
 
