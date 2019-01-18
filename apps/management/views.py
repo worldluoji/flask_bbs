@@ -1,5 +1,5 @@
 
-from flask import Blueprint, render_template, views,request, redirect, url_for,session, flash, g, jsonify
+from flask import Blueprint, render_template, views,request, redirect, url_for,session, g
 from .forms import LoginForm, Resetpwdform, ResetEmailForm, AddBannerForm, EditBannerForm, AddBoardForm, EditBoardForm
 from .models import Administrator, UserRights
 from .decortors import login_required, rights_check
@@ -15,8 +15,9 @@ from apps.communal.models import BannerModel
 from apps.forum.models import Board, Post, HighLightPost
 from flask_paginate import Pagination, get_page_parameter
 import config
+from tasks import send_mail
 
-bp = Blueprint('manage',__name__,url_prefix='/manage')
+bp = Blueprint('manage', __name__, url_prefix='/manage')
 
 @bp.route('/')
 @login_required
@@ -40,7 +41,7 @@ def login():
 '''
 @bp.route('/email/')
 def send_email():
-    msg = Message('email send',recipients=['wolong_haha@163.com'],body='test')
+    msg = Message('email send', recipients=['wolong_haha@163.com'], body='test')
     mail.send(msg)
     return 'success'
 
@@ -49,14 +50,14 @@ def send_email():
 def email_captcha():
     email = request.args.get('email')
     if email:
-        captcha = ''.join(random.sample(CAPTCHA_SOURCE,6))
-        msg = Message('FLASK BBS CAPTCHA',recipients=[email],body=captcha)
-        try:
-            mail.send(msg)
-        except:
-            return restful.server_error()
-
-        memcache_operate.set(email,captcha)
+        captcha = ''.join(random.sample(CAPTCHA_SOURCE, 6))
+        # msg = Message('FLASK BBS CAPTCHA',recipients=[email],body=captcha)
+        # try:
+        #     mail.send(msg)
+        # except:
+        #     return restful.server_error()
+        send_mail.delay('FLASK BBS CAPTCHA', recipients=[email], body=captcha)
+        memcache_operate.set(email, captcha)
         return restful.success('send captcha to {} successfully'.format(email))
     else:
         return restful.param_error('please input email')
